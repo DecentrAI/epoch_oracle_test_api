@@ -1,0 +1,1 @@
+docker stop simple_local_api_container
