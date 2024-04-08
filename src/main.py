@@ -1,20 +1,22 @@
 from fastapi import FastAPI, Request, HTTPException
 from starlette.responses import JSONResponse
 
+from time import time
+
 __VER__ = '0.1.0'
 
 app = FastAPI()
 
 # Simple in-memory rate limiter
-REQUEST_LIMIT = 10 # demo limit
+REQUEST_LIMIT = 5 # demo limit
 time_window = 10  # demo window in seconds
 request_counts = {}
 
 @app.middleware("http")
 async def naive_rate_limitter(request: Request, call_next):
   client_ip = request.client.host
-  current_time = request.url.path
-
+  current_time = time()
+  
   # Implementing a very basic rate limiting
   if client_ip not in request_counts:
     request_counts[client_ip] = {"count": 1, "time": current_time}
