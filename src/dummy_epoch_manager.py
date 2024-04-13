@@ -18,7 +18,7 @@ class DummyEpochManager:
     self.__init_nodes()    
     return
   
-  def P(self, msg):
+  def P(self, msg, **kwargs):
     print(msg, flush=True)
     return
   

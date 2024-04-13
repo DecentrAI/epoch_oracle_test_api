@@ -73,7 +73,7 @@ async def naive_rate_limitter(request: Request, call_next):
 @app.on_event("startup")
 async def startup_event():
   # rectangle-print Starting up the app
-  eng.P(f"Running server v{__VER__} worker ID {WORKER_ID}", flush=True)
+  eng.P(f"Running server v{__VER__} worker ID {WORKER_ID}")
   eng.setup()
   return
 
