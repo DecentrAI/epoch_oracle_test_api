@@ -9,7 +9,7 @@ from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.1.8'
+__VER__ = '0.2.0'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -95,6 +95,7 @@ async def root():
 
 @app.get("/node_epoch")
 async def node_status(node_addr: str, epoch: int):
+  """Get a particualar epoch status of a give node by its address and the epoch no."""
   result = eng.get_node_epoch(node_addr, epoch)
   current_epoch = eng.get_current_epoch()
   if result is None:
@@ -106,6 +107,7 @@ async def node_status(node_addr: str, epoch: int):
 
 @app.get("/node_epochs")
 async def node_status(node_addr: str):
+  """Get all the epochs statuses of a give node by its address."""
   current_epoch = eng.get_current_epoch()
   result = eng.get_node_epochs(node_addr)
   if result is None:
@@ -117,6 +119,7 @@ async def node_status(node_addr: str):
 
 @app.get("/nodes_list")
 async def nodes_list():
+  """Get the list of all nodes"""
   nodes = eng.get_nodes_list()
   current_epoch = eng.get_current_epoch()
   return get_response({
@@ -126,6 +129,7 @@ async def nodes_list():
 
 @app.get("/node_last_epoch")
 async def node_last_epoch(node_addr: str):
+  """Get the last epoch status of a give node by its address."""
   current_epoch = eng.get_current_epoch()
   result = eng.get_node_last_epoch(node_addr)
   if result is None:
@@ -140,16 +144,17 @@ async def node_last_epoch(node_addr: str):
 
 @app.get("/init_node")
 async def init_node(node_addr: str):
-  """This NOT a valid API in the actual system. This is a helper function for testing."""
+  """This NOT a valid API in the actual system. This is a helper function for testing/initing new addresses."""
   addr, epochs = eng.init_node(node_addr)
   return get_response({
     "node": addr, "status": "initialized", "epochs" : epochs
   })
 
 
-@app.post("/oracle_shutdown")
+@app.post("/oracle_restart")
 async def shutdown_server():
-    # Schedule the server to be shut down
-    os.kill(os.getpid(), signal.SIGTERM)
-    # Return a response to the client (note: this response may not be sent successfully if the server shuts down too quickly)
-    return Response(status_code=200, content='Server shutting down...')
+  """This NOT a valid API in the actual system. This is a helper function for manual remote update."""
+  # Schedule the server to be shut down
+  os.kill(os.getpid(), signal.SIGTERM)
+  # Return a response to the client (note: this response may not be sent successfully if the server shuts down too quickly)
+  return Response(status_code=200, content='Server shutting down...')
