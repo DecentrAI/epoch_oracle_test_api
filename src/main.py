@@ -1,13 +1,15 @@
 import uuid
+import os
+import signal
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, Response, HTTPException
 from starlette.responses import JSONResponse
 
 from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.1.5'
+__VER__ = '0.1.7'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -66,6 +68,14 @@ async def naive_rate_limitter(request: Request, call_next):
       request_counts[client_ip] = {"count": 1, "time": current_time}
     # endif within window or not
   return await call_next(request)
+
+
+@app.on_event("startup")
+async def startup_event():
+  # rectangle-print Starting up the app
+  eng.P(f"Running server v{__VER__} worker ID {WORKER_ID}", flush=True)
+  eng.setup()
+  return
 
 
 def get_response(dct_data: dict):
@@ -132,3 +142,11 @@ async def init_node(node_addr: str):
   return get_response({
     "node": addr, "status": "initialized", "epochs" : epochs
   })
+
+
+@app.post("/oracle_shutdown")
+async def shutdown_server():
+    # Schedule the server to be shut down
+    os.kill(os.getpid(), signal.SIGTERM)
+    # Return a response to the client (note: this response may not be sent successfully if the server shuts down too quickly)
+    return Response(status_code=200, content='Server shutting down...')

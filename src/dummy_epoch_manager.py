@@ -17,6 +17,14 @@ class DummyEpochManager:
   def __init__(self):
     self.__init_nodes()    
     return
+  
+  def P(self, msg):
+    print(msg, flush=True)
+    return
+  
+  def setup(self):
+    self.P("Running post-init setup for the dummy epoch manager...")
+    return
 
   def __random_init_node(self, node_addr):
     if node_addr.startswith(PREFIX) and len(node_addr) >= 45: # 49 actually
