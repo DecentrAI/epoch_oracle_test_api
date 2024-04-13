@@ -1,5 +1,5 @@
-import numpy as np
 import uuid
+import random
 
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
@@ -22,7 +22,7 @@ class DummyEpochManager:
     if node_addr.startswith(PREFIX) and len(node_addr) >= 45: # 49 actually
       current_epoch = self.get_current_epoch()
       for x in range(1, current_epoch):
-        self.nodes[node_addr][x] = np.random.randint(0, 255)
+        self.nodes[node_addr][x] = random.randint(0, 255)
     return
   
   def __init_nodes(self, num_nodes=5):
