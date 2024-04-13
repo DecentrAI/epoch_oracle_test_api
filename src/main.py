@@ -9,7 +9,7 @@ from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.2.0'
+__VER__ = '0.2.1'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -144,7 +144,7 @@ async def node_last_epoch(node_addr: str):
 
 @app.get("/init_node")
 async def init_node(node_addr: str):
-  """This NOT a valid API in the actual system. This is a helper function for testing/initing new addresses."""
+  """This NOT a valid API endpoint in the actual system. This is a helper function for testing/initing new addresses."""
   addr, epochs = eng.init_node(node_addr)
   return get_response({
     "node": addr, "status": "initialized", "epochs" : epochs
@@ -153,7 +153,7 @@ async def init_node(node_addr: str):
 
 @app.post("/oracle_restart")
 async def shutdown_server():
-  """This NOT a valid API in the actual system. This is a helper function for manual remote update."""
+  """This NOT a valid API endpoint in the actual system. This is a helper function for manual remote update."""
   # Schedule the server to be shut down
   os.kill(os.getpid(), signal.SIGTERM)
   # Return a response to the client (note: this response may not be sent successfully if the server shuts down too quickly)
