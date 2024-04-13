@@ -9,17 +9,20 @@ from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.1.7'
+__VER__ = '0.1.8'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
 
 INFO = f"""
 ## Simple demo/mockup FastAPI application 
-### Worker ID: {WORKER_ID}
+
   - designed to be run in a Docker container and exposed to the internet using ngrok 
   - for development and testing purposes of the Epoch Oracle
   - can be used for smart contract testing and development
+
+> Worker ID: {WORKER_ID}
+
 """
 
 eng = DummyEpochManager()
