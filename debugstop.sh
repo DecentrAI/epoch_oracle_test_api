@@ -1,1 +1,1 @@
-docker stop simple_local_api_container
+docker stop simple_epoch_oracle_test_api_container

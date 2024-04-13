@@ -5,11 +5,33 @@ from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.1.1'
+__VER__ = '0.1.3'
+
+INFO = """
+## Simple demo/mockup FastAPI application 
+  - designed to be run in a Docker container and exposed to the internet using ngrok 
+  - for development and testing purposes of the Epoch Oracle
+  - can be used for smart contract testing and development
+"""
 
 eng = DummyEpochManager()
 
-app = FastAPI()
+app = FastAPI(
+    title="Simple Epoch Oracle API",
+    summary="Simple Epoch Oracle API using FastAPI, uvicorn, Docker and ngrok",
+    description=INFO,
+    version=__VER__,
+    # terms_of_service="http://example.com/terms/",
+    # contact={
+    #     "name": "API Support",
+    #     "url": "http://www.example.com/support",
+    #     "email": "support@example.com",
+    # },
+    # license_info={
+    #     "name": "Apache 2.0",
+    #     "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    # },
+)
 
 # Simple in-memory rate limiter
 REQUEST_LIMIT = 5 # demo limit

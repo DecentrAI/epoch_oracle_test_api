@@ -1,6 +1,6 @@
 # Simple Local epoch management oracle API with Docker and ngrok
 
-This repository contains a simple FastAPI application designed to be run in a Docker container and exposed to the internet using ngrok for development and testing purposes. It includes scripts for easy setup and teardown of the development environment, utilizing ngrok to securely tunnel the local server to an accessible URL (https://dashboard.ngrok.com/cloud-edge/endpoints)
+This repository contains a simple FastAPI application designed to be run in a Docker container and exposed to the internet using ngrok for development and testing purposes of the Epoch Oracle. It includes scripts for easy setup and teardown of the development environment, utilizing ngrok to securely tunnel the local server to an accessible URL (https://dashboard.ngrok.com/cloud-edge/endpoints)
 
 
 
