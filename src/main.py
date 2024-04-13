@@ -3,7 +3,11 @@ from starlette.responses import JSONResponse
 
 from time import time
 
-__VER__ = '0.1.0'
+from dummy_epoch_manager import DummyEpochManager 
+
+__VER__ = '0.1.1'
+
+eng = DummyEpochManager()
 
 app = FastAPI()
 
@@ -11,6 +15,7 @@ app = FastAPI()
 REQUEST_LIMIT = 5 # demo limit
 time_window = 10  # demo window in seconds
 request_counts = {}
+
 
 @app.middleware("http")
 async def naive_rate_limitter(request: Request, call_next):
@@ -36,4 +41,53 @@ async def naive_rate_limitter(request: Request, call_next):
 
 @app.get("/")
 async def root():
-  return {"message": "Hello World", "version": __VER__}
+  return {
+    "msg": f"Epoch API Demo. Please use /docs for extended documentation.", 
+    "version": __VER__
+  }
+
+
+@app.get("/node_epoch")
+async def node_status(node_addr: str, epoch: int):
+  result = eng.get_node_epoch(node_addr, epoch)
+  current_epoch = eng.get_current_epoch()
+  if result is None:
+    raise HTTPException(status_code=404, detail="Node not found")
+  return {"node": node_addr, "epoch": epoch, "value": result, "current_epoch": current_epoch}
+
+
+@app.get("/node_epochs")
+async def node_status(node_addr: str):
+  current_epoch = eng.get_current_epoch()
+  result = eng.get_node_epochs(node_addr)
+  if result is None:
+    raise HTTPException(status_code=404, detail="Node not found")
+  return {"node": node_addr, "epochs": result, "current_epoch": current_epoch}
+
+
+@app.get("/nodes_list")
+async def nodes_list():
+  nodes = eng.get_nodes_list()
+  current_epoch = eng.get_current_epoch()
+  return {"nodes": nodes, "current_epoch": current_epoch}
+
+
+@app.get("/node_last_epoch")
+async def node_last_epoch(node_addr: str):
+  current_epoch = eng.get_current_epoch()
+  result = eng.get_node_last_epoch(node_addr)
+  if result is None:
+    raise HTTPException(status_code=404, detail="Node not found")
+  return {
+    "node": node_addr, 
+    "last_epoch": result, 
+    "last_epoch_prc" : round(result / 255, 4),
+    "current_epoch": current_epoch
+  }
+
+
+@app.get("/init_node")
+async def init_node(node_addr: str):
+  """This NOT a valid API in the actual system. This is a helper function for testing."""
+  addr, epochs = eng.init_node(node_addr)
+  return {"node": addr, "status": "initialized", "epochs" : epochs}

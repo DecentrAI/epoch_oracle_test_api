@@ -13,9 +13,10 @@ RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 	&& apt install ngrok
 
 # Set the working directory in the container
-WORKDIR /code
+WORKDIR /epoch_manager
 
 ADD src/main.py .
+ADD src/dummy_epoch_manager.py .
 ADD start.sh .
 
 # Expose port 8000 to be accessible from the ngrok tunnel
