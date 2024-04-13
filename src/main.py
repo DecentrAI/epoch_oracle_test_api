@@ -9,7 +9,8 @@ from dummy_epoch_manager import DummyEpochManager
 
 __VER__ = '0.1.3'
 
-WORKER_ID = "0xai_" + str(uuid.uuid4())[:5]
+WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
+WORKER_ID = WORKER_ID[:49]
 
 INFO = """
 ## Simple demo/mockup FastAPI application 
