@@ -5,11 +5,13 @@ import signal
 from fastapi import FastAPI, Request, Response, HTTPException
 from starlette.responses import JSONResponse
 
+from datetime import datetime
+
 from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.2.1'
+__VER__ = '0.2.2'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -50,6 +52,14 @@ time_window = 10  # demo window in seconds
 request_counts = {}
 
 
+def get_response(dct_data: dict):
+  str_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+  dct_data['server_id'] = WORKER_ID
+  dct_data['server_time'] = str_date
+  dct_data['server_current_epoch'] = eng.get_current_epoch()
+  return dct_data
+
+
 @app.middleware("http")
 async def naive_rate_limitter(request: Request, call_next):
   client_ip = request.client.host
@@ -81,9 +91,6 @@ async def startup_event():
   return
 
 
-def get_response(dct_data: dict):
-  dct_data['worker_id'] = WORKER_ID
-  return dct_data
 
 @app.get("/")
 async def root():
@@ -97,23 +104,22 @@ async def root():
 async def node_status(node_addr: str, epoch: int):
   """Get a particualar epoch status of a give node by its address and the epoch no."""
   result = eng.get_node_epoch(node_addr, epoch)
-  current_epoch = eng.get_current_epoch()
+  
   if result is None:
     raise HTTPException(status_code=404, detail="Node not found")
   return get_response({
-    "node": node_addr, "epoch": epoch, "value": result, "current_epoch": current_epoch
+    "node": node_addr, "epoch": epoch, "value": result,
   })
 
 
 @app.get("/node_epochs")
 async def node_status(node_addr: str):
   """Get all the epochs statuses of a give node by its address."""
-  current_epoch = eng.get_current_epoch()
   result = eng.get_node_epochs(node_addr)
   if result is None:
     raise HTTPException(status_code=404, detail="Node not found")
   return get_response({
-    "node": node_addr, "epochs": result, "current_epoch": current_epoch
+    "node": node_addr, "epochs": result, 
   })
 
 
@@ -121,16 +127,14 @@ async def node_status(node_addr: str):
 async def nodes_list():
   """Get the list of all nodes"""
   nodes = eng.get_nodes_list()
-  current_epoch = eng.get_current_epoch()
   return get_response({
-    "nodes": nodes, "current_epoch": current_epoch
+    "nodes": nodes, 
   })
 
 
 @app.get("/node_last_epoch")
 async def node_last_epoch(node_addr: str):
   """Get the last epoch status of a give node by its address."""
-  current_epoch = eng.get_current_epoch()
   result = eng.get_node_last_epoch(node_addr)
   if result is None:
     raise HTTPException(status_code=404, detail="Node not found")
@@ -138,7 +142,6 @@ async def node_last_epoch(node_addr: str):
     "node": node_addr, 
     "last_epoch": result, 
     "last_epoch_prc" : round(result / 255, 4),
-    "current_epoch": current_epoch
   })
 
 
