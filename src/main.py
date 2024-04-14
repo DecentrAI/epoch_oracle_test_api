@@ -11,7 +11,7 @@ from time import time
 
 from dummy_epoch_manager import DummyEpochManager 
 
-__VER__ = '0.2.2'
+__VER__ = '0.2.3'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -160,4 +160,4 @@ async def shutdown_server():
   # Schedule the server to be shut down
   os.kill(os.getpid(), signal.SIGTERM)
   # Return a response to the client (note: this response may not be sent successfully if the server shuts down too quickly)
-  return Response(status_code=200, content='Server shutting down...')
+  return Response(status_code=200, content=f'Server {WORKER_ID} v{__VER__} shutting down...')

@@ -15,7 +15,7 @@ class DummyEpochManager:
   """
   
   def __init__(self):
-    self.__init_nodes()    
+    self.nodes = defaultdict(lambda: defaultdict(int))
     return
   
   def P(self, msg, **kwargs):
@@ -24,6 +24,7 @@ class DummyEpochManager:
   
   def setup(self):
     self.P("Running post-init setup for the dummy epoch manager...")
+    self.__init_nodes()    
     return
 
   def __random_init_node(self, node_addr):
@@ -34,9 +35,7 @@ class DummyEpochManager:
     return
   
   def __init_nodes(self, num_nodes=5):
-    self.nodes = defaultdict(lambda: defaultdict(int))
-    current_epoch = self.get_current_epoch()      
-    self.nodes[PREFIX + '1' * 44] = {x : 255 for x in range(1, current_epoch)}
+    self.P(f"Initializing {num_nodes} dummy nodes...")    
     for _ in range(num_nodes):
       node_addr = self.__generate_addr()
       self.__random_init_node(node_addr)
