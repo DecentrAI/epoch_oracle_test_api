@@ -141,7 +141,8 @@ async def node_last_epoch(node_addr: str):
     raise HTTPException(status_code=404, detail=f"Node {node_addr} not found")
   return get_response({
     "node": node_addr, 
-    "last_epoch": result, 
+    "last_epoch_id" : eng.get_current_epoch() - 1,
+    "last_epoch_val": result, 
     "last_epoch_prc" : round(result / 255, 4),
   })
 

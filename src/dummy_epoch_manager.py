@@ -6,7 +6,7 @@ from collections import defaultdict
 
 import json
 
-__VER__ = '0.3.7'
+__VER__ = '0.3.8'
 
 PREFIX = '0xai_'
 
@@ -122,7 +122,7 @@ class DummyEpochManager:
     return list(self.nodes.keys())
 
   def get_node_epochs(self, node_addr):
-    result = self.__get_node_epochs(as_list=True)
+    result = self.__get_node_epochs(node_addr, as_list=True)
     return result
   
   def get_node_epoch(self, node_addr, epoch):
