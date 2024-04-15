@@ -6,11 +6,18 @@ from collections import defaultdict
 
 import json
 
-__VER__ = '0.3.3'
+__VER__ = '0.3.4'
 
 PREFIX = '0xai_'
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+WARM_ADDR = [
+  '0xai_Aq8hXycnP-OQxZwLH2HJMeVdAkPFd0MOYPcDHAFTm-pT',
+  '0xai_A6IrUO8pNoZrezX7UhYSjD7mAhpqt-p8wTVNHfuTzg-G',
+  '0xai_Ag5CSQuXwotc2in0bw1q-l8l3OxiCVNP9UeNIazELDU-',
+  '0xai_AhvvjmokpMUc0wQ8DOpeIDr_3bmoL8A8-vLZIa5-pDb4',
+]
 
 class DummyEpochManager:
   """
@@ -44,7 +51,10 @@ class DummyEpochManager:
     return
   
   def __init_nodes(self, num_nodes=5):
-    self.P(f"Initializing {num_nodes} dummy nodes...")    
+    self.P(f"Initializing {len(WARM_ADDR)} dummy constant nodes...")
+    for node_addr in WARM_ADDR:
+      self.__random_init_node(node_addr)
+    self.P(f"Initializing {num_nodes} dummy random nodes...")        
     for _ in range(num_nodes):
       node_addr = self.__generate_addr()
       self.__random_init_node(node_addr)
