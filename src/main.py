@@ -9,9 +9,8 @@ from datetime import datetime
 
 from time import time
 
-from dummy_epoch_manager import DummyEpochManager 
+from dummy_epoch_manager import DummyEpochManager, __VER__
 
-__VER__ = '0.2.3'
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -103,10 +102,9 @@ async def root():
 @app.get("/node_epoch")
 async def node_status(node_addr: str, epoch: int):
   """Get a particualar epoch status of a give node by its address and the epoch no."""
-  result = eng.get_node_epoch(node_addr, epoch)
-  
+  result = eng.get_node_epoch(node_addr, epoch)  
   if result is None:
-    raise HTTPException(status_code=404, detail="Node not found")
+    raise HTTPException(status_code=404, detail=f"Node {node_addr}not found")
   return get_response({
     "node": node_addr, "epoch": epoch, "value": result,
   })
@@ -117,7 +115,7 @@ async def node_status(node_addr: str):
   """Get all the epochs statuses of a give node by its address."""
   result = eng.get_node_epochs(node_addr)
   if result is None:
-    raise HTTPException(status_code=404, detail="Node not found")
+    raise HTTPException(status_code=404, detail=f"Node {node_addr} not found")
   return get_response({
     "node": node_addr, "epochs": result, 
   })
@@ -137,7 +135,7 @@ async def node_last_epoch(node_addr: str):
   """Get the last epoch status of a give node by its address."""
   result = eng.get_node_last_epoch(node_addr)
   if result is None:
-    raise HTTPException(status_code=404, detail="Node not found")
+    raise HTTPException(status_code=404, detail=f"Node {node_addr} not found")
   return get_response({
     "node": node_addr, 
     "last_epoch": result, 
