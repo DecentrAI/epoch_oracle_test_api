@@ -5,12 +5,13 @@ import signal
 from fastapi import FastAPI, Request, Response, HTTPException
 from starlette.responses import JSONResponse
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from time import time
 
 from dummy_epoch_manager import DummyEpochManager, __VER__
 
+START_TIME = time()
 
 WORKER_ID = "0xai_" + str(uuid.uuid4()).replace('-', '0') + str(uuid.uuid4()).replace('-', '1')
 WORKER_ID = WORKER_ID[:49]
@@ -56,6 +57,8 @@ def get_response(dct_data: dict):
   dct_data['server_id'] = WORKER_ID
   dct_data['server_time'] = str_date
   dct_data['server_current_epoch'] = eng.get_current_epoch()
+  uptime_seconds = round(time() - START_TIME, 2)
+  dct_data['server_uptime'] = str(timedelta(seconds=uptime_seconds))
   return dct_data
 
 
