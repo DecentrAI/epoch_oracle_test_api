@@ -6,7 +6,7 @@ from collections import defaultdict
 
 import json
 
-__VER__ = '0.3.4'
+__VER__ = '0.3.5'
 
 PREFIX = '0xai_'
 
@@ -89,14 +89,12 @@ class DummyEpochManager:
     return result
   
   
-  def __get_node_epochs(self, as_list=False):
+  def __get_node_epochs(self, node_addr, as_list=False):
     self.__maybe_add_missing_epochs()
-    result = {}
-    if node_addr in self.nodes:
-      result = self.nodes[node_addr]
+    result = self.nodes[node_addr]
     if as_list:
-      max_epoch = max(list(result.keys()))
-      result = [result[i] for i in range(1, max_epoch + 1)]
+      max_epoch = self.get_current_epoch()
+      result = [result[i] for i in range(1, max_epoch)]
     return result
 
   ## similar with original code
