@@ -109,7 +109,10 @@ async def node_status(node_addr: str, epoch: int):
   if result is None:
     raise HTTPException(status_code=404, detail=f"Node {node_addr}not found")
   return get_response({
-    "node": node_addr, "epoch": epoch, "value": result,
+    "node": node_addr, 
+    "epoch_id": epoch, 
+    "epoch_val": result, 
+    "epoch_prc" : round(result / 255, 4),
   })
 
 
@@ -120,7 +123,7 @@ async def node_status(node_addr: str):
   if result is None:
     raise HTTPException(status_code=404, detail=f"Node {node_addr} not found")
   return get_response({
-    "node": node_addr, "epochs": result, 
+    "node": node_addr, "epochs_vals": result, 
   })
 
 
@@ -152,7 +155,7 @@ async def init_node(node_addr: str):
   """This NOT a valid API endpoint in the actual system. This is a helper function for testing/initing new addresses."""
   addr, epochs = eng.init_node(node_addr)
   return get_response({
-    "node": addr, "status": "initialized", "epochs" : epochs
+    "node": addr, "status": "initialized", "epochs_vals" : epochs
   })
 
 
