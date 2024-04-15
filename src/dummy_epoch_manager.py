@@ -6,7 +6,7 @@ from collections import defaultdict
 
 import json
 
-__VER__ = '0.3.2'
+__VER__ = '0.3.3'
 
 PREFIX = '0xai_'
 
@@ -77,7 +77,17 @@ class DummyEpochManager:
     else:
       result = datetime.now(timezone.utc)
     return result
-      
+  
+  
+  def __get_node_epochs(self, as_list=False):
+    self.__maybe_add_missing_epochs()
+    result = {}
+    if node_addr in self.nodes:
+      result = self.nodes[node_addr]
+    if as_list:
+      max_epoch = max(list(result.keys()))
+      result = [result[i] for i in range(1, max_epoch + 1)]
+    return result
 
   ## similar with original code
   
@@ -104,18 +114,13 @@ class DummyEpochManager:
     return list(self.nodes.keys())
 
   def get_node_epochs(self, node_addr):
-    if node_addr not in self.nodes:
-      return {}
-    self.__maybe_add_missing_epochs()
-    dct_epochs = self.nodes[node_addr]
-    max_epoch = max(list(dct_epochs.keys()))
-    result = [dct_epochs[i] for i in range(1, max_epoch + 1)]
+    result = self.__get_node_epochs(as_list=True)
     return result
   
   def get_node_epoch(self, node_addr, epoch):
     if node_addr not in self.nodes:
       return None
-    dct_epochs = self.get_node_epochs(node_addr)
+    dct_epochs = self.__get_node_epochs(node_addr, as_list=False) # return dict as list are 0-indexed
     return dct_epochs[epoch]
   
   def get_node_last_epoch(self, node_addr):
