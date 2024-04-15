@@ -6,7 +6,7 @@ from collections import defaultdict
 
 import json
 
-__VER__ = '0.3.5'
+__VER__ = '0.3.7'
 
 PREFIX = '0xai_'
 

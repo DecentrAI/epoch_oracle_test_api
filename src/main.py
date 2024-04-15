@@ -58,7 +58,7 @@ def get_response(dct_data: dict):
   dct_data['server_time'] = str_date
   dct_data['server_current_epoch'] = eng.get_current_epoch()
   uptime_seconds = round(time() - START_TIME, 2)
-  dct_data['server_uptime'] = str(timedelta(seconds=uptime_seconds))
+  dct_data['server_uptime'] = str(timedelta(seconds=uptime_seconds)).split('.')[0]
   return dct_data
 
 
