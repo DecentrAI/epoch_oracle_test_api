@@ -28,7 +28,7 @@
     - requires 2 hours of work with AID after App 0 is completed.
 
 
-  - [ ] App 3: Foundational Model Server API (2024-05-31) - on "iot" pipeline
+  - [ ] App 3: Foundational Model Server API (2024-05-31) - on "IoTQueueListener" pipeline
     - pipeline defins model, etc
     - api sends data to plugin
     - plugin puts data into normal local pipeline
